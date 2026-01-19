@@ -20,23 +20,23 @@ This project is developed as part of the **AI/ML Internship Program under HEPro 
 
 ## 🧠 System Architecture
 The system follows a modular, Python-first pipeline:
+## System Workflow
 
-Student Data
-↓
-Feature Engineering
-↓
-Rule-Based Scoring (APS, WWS, PTMS, CRS)
-↓
-Student Readiness Index (SRI)
-↓
-ML Models (Clustering & Similarity Matching)
-↓
-Intervention Rules Engine
-↓
-Mentor Actions
-↓
+Student Data  
+↓  
+Feature Engineering  
+↓  
+Rule-Based Scoring (APS, WWS, PTMS, CRS)  
+↓  
+Student Readiness Index (SRI)  
+↓  
+ML Models (Clustering & Similarity Matching)  
+↓  
+Intervention Rules Engine  
+↓  
+Mentor Actions  
+↓  
 Feedback Loop
-
 
 
 ---
