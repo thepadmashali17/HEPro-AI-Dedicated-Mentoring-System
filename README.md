@@ -18,9 +18,9 @@ This project is developed as part of the **AI/ML Internship Program under HEPro 
 
 ---
 
-## 🧠 System Architecture
+
+## 🧠 System Workflow
 The system follows a modular, Python-first pipeline:
-## System Workflow
 
 Student Data  
 ↓  
@@ -132,13 +132,5 @@ These are used to:
 
 ---
 
-## 👨‍💻 Developed By
-**Intern Name:** _Your Name_  
-**Program:** AI/ML Internship – HEPro AI  
-**Institution:** _Your College Name_
 
----
-
-## 📜 License
-This project is licensed under the MIT License.
 
