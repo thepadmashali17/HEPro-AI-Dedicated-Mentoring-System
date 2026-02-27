@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HEPro AI+ | Intelligent Mentoring System Dashboard</title>
+  <meta name="description" content="HEPro AI+ — An intelligent, data-driven student mentoring system leveraging AI/ML for personalised intervention and mentor matching."/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --surface: #111827;
+      --card: #1a2235;
+      --card2: #1e2a3a;
+      --border: rgba(255,255,255,0.07);
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --green: #10b981;
+      --blue: #3b82f6;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --teal: #14b8a6;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --glow: 0 0 40px rgba(99,102,241,0.15);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── Animated background ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 800px 600px at 10% 10%, rgba(99,102,241,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 600px 500px at 90% 80%, rgba(139,92,246,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── Top nav bar ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(11,15,26,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+    }
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+    }
+    .logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      background: linear-gradient(90deg, #a78bfa, #6366f1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-badge {
+      font-size: 11px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── Main layout ─── */
+    main {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 40px 80px;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      text-align: center;
+      margin-bottom: 56px;
+      animation: fadeInUp 0.7s ease both;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(99,102,241,0.1);
+      border: 1px solid rgba(99,102,241,0.2);
+      padding: 6px 16px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #e2e8f0 0%, #a78bfa 50%, #6366f1 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ─── Section label ─── */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-label h2 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── KPI Cards ─── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .kpi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: fadeInUp 0.6s ease both;
+    }
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--glow);
+    }
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      border-radius: 16px 16px 0 0;
+    }
+    .kpi-card.purple::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .kpi-card.green::before  { background: linear-gradient(90deg, var(--green), var(--teal)); }
+    .kpi-card.red::before    { background: linear-gradient(90deg, var(--red), #f97316); }
+    .kpi-card.blue::before   { background: linear-gradient(90deg, var(--blue), var(--teal)); }
+    .kpi-card.yellow::before { background: linear-gradient(90deg, var(--yellow), #f97316); }
+    .kpi-card.teal::before   { background: linear-gradient(90deg, var(--teal), var(--green)); }
+    .kpi-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    .kpi-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .kpi-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ─── Charts grid ─── */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .charts-grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .chart-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      animation: fadeInUp 0.7s ease both;
+      transition: box-shadow 0.2s;
+    }
+    .chart-card:hover { box-shadow: var(--glow); }
+    .chart-card.full { grid-column: 1 / -1; }
+    .chart-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .chart-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+    .chart-wrap { position: relative; height: 220px; }
+    .chart-wrap-tall { position: relative; height: 280px; }
+
+    /* ─── Cluster cards ─── */
+    .cluster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .cluster-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeInUp 0.7s ease both;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cluster-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--glow);
+    }
+    .cluster-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      opacity: 0.06;
+      transform: translate(30px, 30px);
+    }
+    .cluster-card.c0::after { background: var(--red); }
+    .cluster-card.c1::after { background: var(--yellow); }
+    .cluster-card.c2::after { background: var(--green); }
+    .cluster-card.c3::after { background: var(--blue); }
+    .cluster-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cluster-card.c0 .cluster-badge { background: rgba(239,68,68,0.15); color: var(--red); }
+    .cluster-card.c1 .cluster-badge { background: rgba(245,158,11,0.15); color: var(--yellow); }
+    .cluster-card.c2 .cluster-badge { background: rgba(16,185,129,0.15); color: var(--green); }
+    .cluster-card.c3 .cluster-badge { background: rgba(59,130,246,0.15); color: var(--blue); }
+    .cluster-name {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .cluster-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .cluster-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .cluster-stat span:first-child { color: var(--muted); }
+    .cluster-stat span:last-child { font-weight: 600; }
+
+    /* ─── Pipeline section ─── */
+    .pipeline {
+      display: flex;
+      align-items: flex-start;
+      gap: 0;
+      margin-bottom: 32px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .pipeline-step {
+      flex: 1;
+      min-width: 180px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 16px;
+      position: relative;
+      animation: fadeInUp 0.6s ease both;
+      transition: transform 0.2s;
+    }
+    .pipeline-step:hover { transform: translateY(-4px); }
+    .pipeline-step + .pipeline-step { margin-left: 12px; }
+    .pipeline-step + .pipeline-step::before {
+      content: '→';
+      position: absolute;
+      left: -18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .step-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .step-icon { font-size: 28px; margin-bottom: 8px; }
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .step-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .step-output {
+      margin-top: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(99,102,241,0.1);
+      padding: 4px 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    /* ─── Mentor table ─── */
+    .mentor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    .mentor-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      animation: fadeInUp 0.6s ease both;
+      transition: transform 0.2s;
+    }
+    .mentor-card:hover { transform: translateY(-3px); }
+    .mentor-avatar {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .mentor-info { flex: 1; }
+    .mentor-name { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .mentor-spec { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+    .mentor-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .mentor-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .tag-academic  { background: rgba(99,102,241,0.15); color: #a78bfa; }
+    .tag-wellness  { background: rgba(16,185,129,0.15); color: var(--green); }
+    .tag-career    { background: rgba(245,158,11,0.15); color: var(--yellow); }
+    .tag-general   { background: rgba(59,130,246,0.15); color: var(--blue); }
+    .mentor-rating {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--yellow);
+    }
+
+    /* ─── Intervention table ─── */
+    .intervention-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+    .intervention-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 16px;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid var(--border);
+    }
+    .intervention-table td {
+      padding: 12px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .intervention-table tr:last-child td { border-bottom: none; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .pill-red    { background: rgba(239,68,68,0.15); color: var(--red); }
+    .pill-yellow { background: rgba(245,158,11,0.15); color: var(--yellow); }
+    .pill-blue   { background: rgba(59,130,246,0.15); color: var(--blue); }
+    .pill-green  { background: rgba(16,185,129,0.15); color: var(--green); }
+
+    /* ─── Footer ─── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* ─── Animations ─── */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes countUp {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* Staggered delays */
+    .kpi-card:nth-child(1) { animation-delay: 0.1s; }
+    .kpi-card:nth-child(2) { animation-delay: 0.15s; }
+    .kpi-card:nth-child(3) { animation-delay: 0.2s; }
+    .kpi-card:nth-child(4) { animation-delay: 0.25s; }
+    .kpi-card:nth-child(5) { animation-delay: 0.3s; }
+    .kpi-card:nth-child(6) { animation-delay: 0.35s; }
+
+    @media (max-width: 900px) {
+      .charts-grid, .charts-grid-3 { grid-template-columns: 1fr; }
+      .pipeline { flex-direction: column; }
+      .pipeline-step + .pipeline-step { margin-left: 0; margin-top: 12px; }
+      .pipeline-step + .pipeline-step::before { display: none; }
+      main { padding: 24px 16px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="logo-icon">🎓</div>
+      <span class="logo-text">HEPro AI+</span>
+    </div>
+    <span class="nav-badge">AI/ML Internship · Final Dashboard</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-eyebrow">🤖 Intelligent Mentoring System</div>
+    <h1>Dedicated Mentoring<br/>Powered by AI & ML</h1>
+    <p>A comprehensive, data-driven platform that scores, segments, and matches 500 students with personalised mentors and intervention playbooks using K-Means clustering and rule-based AI.</p>
+  </div>
+
+  <!-- ── KPIs ── -->
+  <div class="section-label"><h2>Key Metrics</h2></div>
+  <div class="kpi-grid">
+    <div class="kpi-card purple">
+      <div class="kpi-icon">👨‍🎓</div>
+      <div class="kpi-value" id="kpi-students">0</div>
+      <div class="kpi-label">Total Students</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-icon">🚨</div>
+      <div class="kpi-value" id="kpi-atrisk">0</div>
+      <div class="kpi-label">At-Risk (Red)</div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-icon">⚠️</div>
+      <div class="kpi-value" id="kpi-yellow">0</div>
+      <div class="kpi-label">Needs Monitoring (Yellow)</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-icon">📈</div>
+      <div class="kpi-value" id="kpi-blue">0</div>
+      <div class="kpi-label">On Track (Blue)</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon">🏆</div>
+      <div class="kpi-value" id="kpi-green">0</div>
+      <div class="kpi-label">High Performers (Green)</div>
+    </div>
+    <div class="kpi-card teal">
+      <div class="kpi-icon">🧑‍🏫</div>
+      <div class="kpi-value">6</div>
+      <div class="kpi-label">Active Mentors</div>
+    </div>
+  </div>
+
+  <!-- ── Pipeline ── -->
+  <div class="section-label"><h2>End-to-End AI Pipeline</h2></div>
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="step-num">Activity 01</div>
+      <div class="step-icon">🗄️</div>
+      <div class="step-title">Dataset Design</div>
+      <div class="step-desc">500-student dataset with GPA, attendance, wellness, productivity & career indicators.</div>
+      <div class="step-output">students_500.csv</div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">Activity 02</div>
+      <div class="step-icon">📊</div>
+      <div class="step-title">Student Scoring</div>
+      <div class="step-desc">Computed APS, WWS, PTMS, CRS & Student Readiness Index (SRI) for all students.</div>
+      <div class="step-output">students_scored.csv</div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">Activity 03</div>
+      <div class="step-icon">🧠</div>
+      <div class="step-title">K-Means Clustering</div>
+      <div class="step-desc">Segmented students into 4 clusters using StandardScaler + K-Means (k=4, seed=42).</div>
+      <div class="step-output">students_clustered.csv</div>
+    </div>
+    <div class="pipeline-step">
+      <div class="step-num">Activity 04</div>
+      <div class="step-icon">🤝</div>
+      <div class="step-title">Mentor Matching</div>
+      <div class="step-desc">Matched students to mentors by primary need (Wellness/Academic/Career/General) using round-robin assignment.</div>
+      <div class="step-output">student_recommendations.csv</div>
+    </div>
+  </div>
+
+  <!-- ── Scoring Charts ── -->
+  <div class="section-label"><h2>Activity 2 — Student Scoring System</h2></div>
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Risk Category Distribution</div>
+      <div class="chart-sub">SRI-based classification of 500 students</div>
+      <div class="chart-wrap">
+        <canvas id="riskChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Average Score Breakdown by Component</div>
+      <div class="chart-sub">Mean scores across all students per metric</div>
+      <div class="chart-wrap">
+        <canvas id="scoreChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Cluster Analysis ── -->
+  <div class="section-label"><h2>Activity 3 — Student Segmentation</h2></div>
+  <div class="cluster-grid">
+    <div class="cluster-card c0">
+      <div class="cluster-badge">🔴 Cluster 0</div>
+      <div class="cluster-name">At-Risk Students</div>
+      <div class="cluster-desc">Low academic and wellness scores. Requires immediate multi-domain intervention and regular check-ins.</div>
+      <div class="cluster-stat"><span>Students</span><span>147</span></div>
+      <div class="cluster-stat"><span>Risk Level</span><span style="color:var(--red)">HIGH</span></div>
+      <div class="cluster-stat"><span>Primary Action</span><span>Immediate Intervention</span></div>
+    </div>
+    <div class="cluster-card c1">
+      <div class="cluster-badge">🟡 Cluster 1</div>
+      <div class="cluster-name">Transitional Students</div>
+      <div class="cluster-desc">Moderate performance across most dimensions. Needs structured guidance and habit-building support.</div>
+      <div class="cluster-stat"><span>Students</span><span>124</span></div>
+      <div class="cluster-stat"><span>Risk Level</span><span style="color:var(--yellow)">MEDIUM</span></div>
+      <div class="cluster-stat"><span>Primary Action</span><span>Structured Guidance</span></div>
+    </div>
+    <div class="cluster-card c2">
+      <div class="cluster-badge">🟢 Cluster 2</div>
+      <div class="cluster-name">High Performers</div>
+      <div class="cluster-desc">Strong scores across all dimensions. Potential peer mentors. Focus on growth and leadership opportunities.</div>
+      <div class="cluster-stat"><span>Students</span><span>124</span></div>
+      <div class="cluster-stat"><span>Risk Level</span><span style="color:var(--green)">LOW</span></div>
+      <div class="cluster-stat"><span>Primary Action</span><span>Growth Opportunities</span></div>
+    </div>
+    <div class="cluster-card c3">
+      <div class="cluster-badge">🔵 Cluster 3</div>
+      <div class="cluster-name">Specialized / Career-Focused</div>
+      <div class="cluster-desc">Strong career clarity but mixed academic/wellness scores. Requires professional-domain mentor matching.</div>
+      <div class="cluster-stat"><span>Students</span><span>105</span></div>
+      <div class="cluster-stat"><span>Risk Level</span><span style="color:var(--blue)">MIXED</span></div>
+      <div class="cluster-stat"><span>Primary Action</span><span>Career Mentoring</span></div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <div class="chart-title">Cluster Distribution</div>
+      <div class="chart-sub">Students per K-Means cluster (k=4)</div>
+      <div class="chart-wrap">
+        <canvas id="clusterChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Risk Category × Cluster Heatmap</div>
+      <div class="chart-sub">Cross-tabulation of SRI risk bands per cluster</div>
+      <div class="chart-wrap">
+        <canvas id="heatChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Mentor Matching ── -->
+  <div class="section-label"><h2>Activity 4 — Mentor Matching & Interventions</h2></div>
+
+  <div class="charts-grid-3" style="margin-bottom:20px;">
+    <div class="chart-card">
+      <div class="chart-title">Student Need Distribution</div>
+      <div class="chart-sub">Primary need assigned per student</div>
+      <div class="chart-wrap">
+        <canvas id="needChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Mentor Workload</div>
+      <div class="chart-sub">Students assigned per mentor</div>
+      <div class="chart-wrap">
+        <canvas id="mentorChart"></canvas>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Alert Level Summary</div>
+      <div class="chart-sub">High priority vs. normal students</div>
+      <div class="chart-wrap">
+        <canvas id="alertChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mentor cards -->
+  <div class="mentor-grid">
+    <div class="mentor-card">
+      <div class="mentor-avatar">👩‍🏫</div>
+      <div class="mentor-info">
+        <div class="mentor-name">Dr. Alice Smith</div>
+        <div class="mentor-spec">Higher Education & Study Strategies</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag tag-academic">Academic</span>
+        </div>
+      </div>
+      <div class="mentor-rating">⭐ 4.8</div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-avatar">👨‍💼</div>
+      <div class="mentor-info">
+        <div class="mentor-name">Mr. Bob Jones</div>
+        <div class="mentor-spec">Corporate Relations & Placement</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag tag-career">Career</span>
+        </div>
+      </div>
+      <div class="mentor-rating">⭐ 4.5</div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-avatar">👩‍⚕️</div>
+      <div class="mentor-info">
+        <div class="mentor-name">Ms. Carol White</div>
+        <div class="mentor-spec">Mental Health & Stress Management</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag tag-wellness">Wellness</span>
+        </div>
+      </div>
+      <div class="mentor-rating">⭐ 4.9</div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-avatar">👨‍🔬</div>
+      <div class="mentor-info">
+        <div class="mentor-name">Dr. David Brown</div>
+        <div class="mentor-spec">STEM Education & Research</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag tag-academic">Academic</span>
+        </div>
+      </div>
+      <div class="mentor-rating">⭐ 4.7</div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-avatar">👩‍🌿</div>
+      <div class="mentor-info">
+        <div class="mentor-name">Ms. Eva Green</div>
+        <div class="mentor-spec">Holistic Wellbeing & Lifestyle</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag tag-wellness">Wellness</span>
+        </div>
+      </div>
+      <div class="mentor-rating">⭐ 4.6</div>
+    </div>
+    <div class="mentor-card">
+      <div class="mentor-avatar">👨‍🚀</div>
+      <div class="mentor-info">
+        <div class="mentor-name">Mr. Frank Miller</div>
+        <div class="mentor-spec">Entrepreneurship & Skill Development</div>
+        <div class="mentor-tags">
+          <span class="mentor-tag tag-career">Career</span>
+        </div>
+      </div>
+      <div class="mentor-rating">⭐ 5.0</div>
+    </div>
+  </div>
+
+  <!-- Intervention playbook table -->
+  <div class="section-label"><h2>Intervention Playbooks</h2></div>
+  <div class="chart-card" style="padding:0; overflow:hidden; margin-bottom:32px;">
+    <table class="intervention-table">
+      <thead>
+        <tr>
+          <th>Primary Need</th>
+          <th>Risk Category</th>
+          <th>Intervention Playbook</th>
+          <th>Alert Level</th>
+          <th>Students</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Wellness</strong></td>
+          <td><span class="pill pill-red">Red</span></td>
+          <td>Stress counseling & wellbeing sessions</td>
+          <td><span class="pill pill-red">HIGH PRIORITY</span></td>
+          <td><strong>63</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Academic</strong></td>
+          <td><span class="pill pill-yellow">Yellow/Blue</span></td>
+          <td>Weekly academic review & study plan</td>
+          <td><span class="pill pill-blue">Normal</span></td>
+          <td><strong>23</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Career</strong></td>
+          <td><span class="pill pill-yellow">Mixed</span></td>
+          <td>Career guidance & skill roadmap</td>
+          <td><span class="pill pill-blue">Normal</span></td>
+          <td><strong>196</strong></td>
+        </tr>
+        <tr>
+          <td><strong>General</strong></td>
+          <td><span class="pill pill-green">Blue/Green</span></td>
+          <td>General mentoring support</td>
+          <td><span class="pill pill-blue">Normal</span></td>
+          <td><strong>218</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  <p>HEPro AI+ Intelligent Mentoring System &nbsp;·&nbsp; AIML Internship Project &nbsp;·&nbsp; 500 Students · 4 Activities · 6 Mentors · February 2026</p>
+</footer>
+
+<script>
+/* ── Data ── */
+const riskData   = { Red: 116, Yellow: 270, Blue: 112, Green: 2 };
+const scoreData  = { APS: 74.9, WWS: 51.9, PTMS: 49.0, CRS: 55.7, SRI: 59.5 };
+const clusterData = [147, 124, 124, 105];
+const needData   = { General: 218, Career: 196, Wellness: 63, Academic: 23 };
+const mentorData = {
+  'Dr. Alice Smith': 84, 'Mr. Bob Jones': 84, 'Ms. Carol White': 84,
+  'Dr. David Brown': 84, 'Ms. Eva Green': 83, 'Mr. Frank Miller': 81
+};
+const alertData  = { 'HIGH PRIORITY': 63, 'Normal': 437 };
+
+/* cross-tab: cluster × risk
+   Cluster 0: Red=53, Yellow=94, Blue=0
+   Cluster 1: Red=0,  Yellow=89, Blue=35
+   Cluster 2: Red=0,  Yellow=35, Blue=87, Green=2
+   Cluster 3: Red=10, Yellow=93, Blue=2
+*/
+
+/* ── Animate KPI counters ── */
+function animateCount(id, target, suffix='') {
+  const el = document.getElementById(id);
+  if (!el) return;
+  let val = 0;
+  const step = Math.ceil(target / 40);
+  const timer = setInterval(() => {
+    val = Math.min(val + step, target);
+    el.textContent = val + suffix;
+    if (val >= target) clearInterval(timer);
+  }, 30);
+}
+window.addEventListener('load', () => {
+  animateCount('kpi-students', 500);
+  animateCount('kpi-atrisk', 116);
+  animateCount('kpi-yellow', 270);
+  animateCount('kpi-blue', 112);
+  animateCount('kpi-green', 2);
+});
+
+/* ── Chart defaults ── */
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.font.size = 12;
+
+const gridOpts = {
+  color: 'rgba(255,255,255,0.05)',
+  drawBorder: false
+};
+
+/* 1. Risk Doughnut */
+new Chart(document.getElementById('riskChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['🔴 Red (At-Risk)', '🟡 Yellow', '🔵 Blue', '🟢 Green'],
+    datasets: [{
+      data: [116, 270, 112, 2],
+      backgroundColor: ['#ef4444','#f59e0b','#3b82f6','#10b981'],
+      borderWidth: 0,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'right', labels: { boxWidth: 12, padding: 14 } }
+    }
+  }
+});
+
+/* 2. Score Radar */
+new Chart(document.getElementById('scoreChart'), {
+  type: 'bar',
+  data: {
+    labels: ['APS', 'WWS', 'PTMS', 'CRS', 'SRI'],
+    datasets: [{
+      label: 'Average Score (out of 100)',
+      data: [74.9, 51.9, 49.0, 55.7, 59.5],
+      backgroundColor: [
+        'rgba(99,102,241,0.7)',
+        'rgba(16,185,129,0.7)',
+        'rgba(245,158,11,0.7)',
+        'rgba(59,130,246,0.7)',
+        'rgba(139,92,246,0.7)',
+      ],
+      borderRadius: 8,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: true, max: 100, grid: gridOpts },
+      x: { grid: { display: false } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+/* 3. Cluster Bar */
+new Chart(document.getElementById('clusterChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Cluster 0\n(At-Risk)', 'Cluster 1\n(Transitional)', 'Cluster 2\n(High Perf.)', 'Cluster 3\n(Specialized)'],
+    datasets: [{
+      label: 'Students',
+      data: [147, 124, 124, 105],
+      backgroundColor: ['rgba(239,68,68,0.8)','rgba(245,158,11,0.8)','rgba(16,185,129,0.8)','rgba(59,130,246,0.8)'],
+      borderRadius: 8,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { beginAtZero: true, grid: gridOpts },
+      x: { grid: { display: false } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+/* 4. Stacked bar: cluster × risk */
+new Chart(document.getElementById('heatChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Cluster 0', 'Cluster 1', 'Cluster 2', 'Cluster 3'],
+    datasets: [
+      { label: 'Red',    data: [53,  0,  0, 10], backgroundColor: 'rgba(239,68,68,0.8)',  borderRadius: 0 },
+      { label: 'Yellow', data: [94, 89, 35, 93], backgroundColor: 'rgba(245,158,11,0.8)', borderRadius: 0 },
+      { label: 'Blue',   data: [ 0, 35, 87,  2], backgroundColor: 'rgba(59,130,246,0.8)', borderRadius: 0 },
+      { label: 'Green',  data: [ 0,  0,  2,  0], backgroundColor: 'rgba(16,185,129,0.8)', borderRadius: 0 },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: { stacked: true, grid: gridOpts },
+      x: { stacked: true, grid: { display: false } }
+    },
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10 } }
+    }
+  }
+});
+
+/* 5. Need Doughnut */
+new Chart(document.getElementById('needChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['General (218)','Career (196)','Wellness (63)','Academic (23)'],
+    datasets: [{
+      data: [218, 196, 63, 23],
+      backgroundColor: ['rgba(59,130,246,0.85)','rgba(245,158,11,0.85)','rgba(16,185,129,0.85)','rgba(99,102,241,0.85)'],
+      borderWidth: 0,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '60%',
+    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, font: { size: 11 } } } }
+  }
+});
+
+/* 6. Mentor workload */
+new Chart(document.getElementById('mentorChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Alice', 'Bob', 'Carol', 'David', 'Eva', 'Frank'],
+    datasets: [{
+      label: 'Students Assigned',
+      data: [84, 84, 84, 84, 83, 81],
+      backgroundColor: 'rgba(139,92,246,0.75)',
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y',
+    scales: {
+      x: { beginAtZero: true, grid: gridOpts },
+      y: { grid: { display: false } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+
+/* 7. Alert pie */
+new Chart(document.getElementById('alertChart'), {
+  type: 'pie',
+  data: {
+    labels: ['HIGH PRIORITY (63)','Normal (437)'],
+    datasets: [{
+      data: [63, 437],
+      backgroundColor: ['rgba(239,68,68,0.85)','rgba(99,102,241,0.75)'],
+      borderWidth: 0,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10, font: { size: 11 } } }
+    }
+  }
+});
+</script>
+</body>
+</html>
