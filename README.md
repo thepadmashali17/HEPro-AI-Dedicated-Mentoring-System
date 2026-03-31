@@ -1,6 +1,6 @@
 # Dedicated Mentoring System for Students (HEPro AI+)
 
-## 📌 Project Overview
+## Project Overview
 The Dedicated Mentoring System for Students (HEPro AI+) is a hybrid AI-powered platform designed to proactively support students across academics, wellness, productivity, and career readiness.
 
 The system combines **rule-based decision-making** with **machine learning models** to ensure transparency, interpretability, and scalability in educational mentoring.
@@ -9,7 +9,7 @@ This project is developed as part of the **AI/ML Internship Program under HEPro 
 
 ---
 
-## 🎯 Objectives
+## Objectives
 - To continuously evaluate student readiness using explainable scoring models
 - To segment students into risk and potential-based groups using ML
 - To match students with suitable mentors using similarity modeling
@@ -19,7 +19,7 @@ This project is developed as part of the **AI/ML Internship Program under HEPro 
 ---
 
 
-## 🧠 System Workflow
+## System Workflow
 The system follows a modular, Python-first pipeline:
 
 Student Data  
@@ -41,7 +41,7 @@ Feedback Loop
 
 ---
 
-## 📊 Core Scoring Models
+## Core Scoring Models
 The system computes the following scores (0–100 scale):
 
 - **APS** – Academic Performance Score
@@ -56,7 +56,7 @@ SRI acts as the primary indicator for student status and intervention intensity.
 
 ---
 
-## 🤖 Machine Learning Components
+## Machine Learning Components
 
 ### 1. Student Segmentation (Unsupervised Learning)
 - Algorithm: K-Means Clustering
@@ -77,7 +77,7 @@ SRI acts as the primary indicator for student status and intervention intensity.
 
 ---
 
-## ⚙️ Intervention Engine
+## Intervention Engine
 The Python-based rules engine converts scores and ML insights into structured actions:
 
 - Automated guidance (notifications, nudges)
@@ -86,7 +86,7 @@ The Python-based rules engine converts scores and ML insights into structured ac
 
 ---
 
-## 🔄 Feedback & Learning
+## Feedback & Learning
 The system logs:
 - Mentor feedback
 - Student engagement metrics
@@ -99,7 +99,7 @@ These are used to:
 
 ---
 
-## 🗂 Dataset Description
+## Dataset Description
 - **Student Dataset:** Academic, behavioral, wellness, productivity, and career-related features
 - **Mentor Dataset:** Expertise, experience, mentoring style, availability, and feedback scores
 
@@ -107,7 +107,7 @@ These are used to:
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 - Python
 - Pandas, NumPy
 - Scikit-learn
@@ -116,7 +116,7 @@ These are used to:
 
 ---
 
-## 📈 Expected Outcomes
+## Expected Outcomes
 - Explainable AI-based mentoring system
 - ML-driven student segmentation
 - Personalized mentor allocation
@@ -124,7 +124,7 @@ These are used to:
 
 ---
 
-## 🚀 Future Enhancements
+## Future Enhancements
 - Real-time dashboard integration
 - NLP-based sentiment analysis
 - Cloud deployment
